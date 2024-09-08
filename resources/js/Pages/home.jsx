@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, Fragment } from "react";
+import axios from "axios";
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -7,15 +7,16 @@ const Home = () => {
   const [activeEvent, setActiveEvent] = useState(null); // Active event for displaying at the top
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/events')
-      .then(response => {
+    axios
+      .get("http://localhost:8000/api/events")
+      .then((response) => {
         setEvents(response.data);
         if (response.data.length > 0) {
           setActiveEvent(response.data[0]); // Set the first event as default
         }
       })
-      .catch(error => {
-        console.error('Error fetching events:', error);
+      .catch((error) => {
+        console.error("Error fetching events:", error);
       });
   }, []);
 
@@ -29,14 +30,18 @@ const Home = () => {
       <div className="timeline">
         <div className="timeline-item-line"></div>
         {events.map((event, index) => (
-          <div key={index} className="timeline-item">
+          <Fragment key={index}>
             <div
-              className={`timeline-year ${activeIndex === index ? 'active' : ''}`} // Add active class if clicked
+              className="timeline-item"
               onClick={() => handleClick(index)} // Handle click event
             >
-              {event.year}
+              <div
+                className={`timeline-year ${activeIndex === index ? "active" : ""}`} // Add active class if clicked
+              >
+                {event.year}
+              </div>
             </div>
-          </div>
+          </Fragment>
         ))}
       </div>
       {activeEvent && (
